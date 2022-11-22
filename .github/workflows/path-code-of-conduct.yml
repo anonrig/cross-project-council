@@ -1,0 +1,25 @@
+name: Patch Code of Conduct
+on: [push]
+
+jobs:
+  main_job:
+    runs-on: ubuntu-latest
+    name: Test Action
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Patch CoC
+        uses: anonrig/patch-my-code-of-conduct@v1.0.2
+        with:
+          base_file_path: './doc/CODE_OF_CONDUCT_BASE.md'
+          patch_file_path: './doc/CODE_OF_CONDUCT_PATCH'
+          output_file_path: './CODE_OF_CONDUCT.md'
+      - uses: gr2m/create-or-update-pull-request-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          body: "Applied the patch to the base Code of Conduct."
+          commit-message: 'doc: update Code of Conduct'
+          title: 'doc: update Code of Conduct'
